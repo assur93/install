@@ -1,5 +1,7 @@
 # Instalacion rapida 
 
+## Instalacion Home Assistant
+
 Lo primero va a ser encender la pi, sacar la ip, conectar con el putty y luego descargar el archivo con <i> wget </i> . Despues de eso se convierte en ejecutable con el
 comando <i> chmod 755 setup.sh </i> y tras esto ejecutarlo de forma sh setup.sh. Cuando acabe la instalacion es necesario teclear de forma manual los siguientes comandos:
 
@@ -8,3 +10,10 @@ cd /srv/homeassistant <br/> python3 -m venv . <br/> source bin/activate <br/> pi
 [Unit] <br/> Description=Home Assistant <br/> After=network-online.target <br/> <br/> [Service] <br/> Type=simple <br/> User=%i <br/> ExecStart=/srv/homeassistant/bin/hass -c "/home/homeassistant/.homeassistant" <br/> <br/> [Install] <br/> WantedBy=multi-user.target
  
 De esta forma ya tenemos <b> Home Assistant </b> funcionando y de forma que se inicie al arrancar la Raspberry.
+
+## Instalacion Mosquitto
+
+Para la instalacion de <b> Mosquitto </b> tan solo es necesario descargar con <i> wget </i> el archivo <b> mosquito.sh </b> , convertirlo a ejecutable con <i> chmod 755 </i> y ejecutarlo. Casi al final de la instalacion nos pedira la contraseña para nuestro server mosquitto, tras introducirla la instalacion finalizara y ya estara instalado <b> Mosquitto </b> . ( El usuario por defecto es <i> insega </i> )
+
+## Instalacion Zigbee2MQTT
+
