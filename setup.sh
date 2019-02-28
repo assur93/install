@@ -6,7 +6,7 @@ sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 sudo useradd -rm homeassistant
 cd /srv
 sudo mkdir homeassistant
-sudo chown –R homeassistant:homeassistant homeassistant
+sudo chown homeassistant:homeassistant homeassistant
 sudo su -s /bin/bash homeassistant
 cd /srv/homeassistant
 python3 -m venv .
