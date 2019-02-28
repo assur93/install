@@ -20,9 +20,7 @@ Por ultimo, para activar el Mosquitto en Home Ass es necesario entrar en el arch
 sudo –u homeassistant –H –s <br/> cd /home/homeassistant/.homeassistant <br/> nano configurations.yaml <br/> <br/>
 Se abrira un archivo en el cual se debe escribir en cualquier linea: <br/> <br/> mqtt: <br/> &nbsp;&nbsp; broker: IPRaspberry <br/> &nbsp;&nbsp; port: 1883 <br/> &nbsp;&nbsp; username: insega <br/> &nbsp;&nbsp; password: <i> YourPassword </i> <br/> <br/> <b> Es importante respetar los espacios tal y como se muestra. </b> 
 
-Antes de pasar a la siguiente instalacion es necesario ejecutar el comando <i> sudo nano -w /etc/systemd/system/homeassistant.service  </i> y hacer el siguiente cambio:
-
-After=network-online.target ==> After=network-online.target mosquitto.service
+Antes de pasar a la siguiente instalacion es necesario ejecutar el comando <br/> <i> sudo nano -w /etc/systemd/system/homeassistant.service </i> <br/> y hacer el siguiente cambio: <br/> After=network-online.target &nbsp;&nbsp; <b> ==> </b> &nbsp;&nbsp; After=network-online.target mosquitto.service
 
 
 ## Instalacion Zigbee2MQTT
