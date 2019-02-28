@@ -11,4 +11,3 @@ nano /opt/zigbee2mqtt/data/configuration.yaml
 sudo nano /etc/systemd/system/zigbee2mqtt.service
 sudo systemctl enable zigbee2mqtt
 sudo systemctl start zigbee2mqtt
-sudo systemctl status zigbee2mqtt
