@@ -19,11 +19,7 @@ Por ultimo, para activar el Mosquitto en Home Ass es necesario entrar en el arch
 
 sudo –u homeassistant –H –s <br/> cd /home/homeassistant/.homeassistant <br/> nano configurations.yaml <br/> <br/>
 abrira un archivo en el cual se debe escribir:
-mqtt:
-  broker: ip
-  port: 1883
-  username: insega
-  password: insega
+mqtt: <br/> &nbsp;&nbsp; broker: IPRaspberry <br/> &nbsp;&nbsp; port: 1883 <br/> &nbsp;&nbsp; username: insega <br/> &nbsp;&nbsp; password: insega
 
 
 ## Instalacion Zigbee2MQTT
