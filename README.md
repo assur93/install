@@ -20,6 +20,10 @@ Por ultimo, para activar el Mosquitto en Home Ass es necesario entrar en el arch
 sudo –u homeassistant –H –s <br/> cd /home/homeassistant/.homeassistant <br/> nano configurations.yaml <br/> <br/>
 Se abrira un archivo en el cual se debe escribir en cualquier linea: <br/> <br/> mqtt: <br/> &nbsp;&nbsp; broker: IPRaspberry <br/> &nbsp;&nbsp; port: 1883 <br/> &nbsp;&nbsp; username: insega <br/> &nbsp;&nbsp; password: <i> YourPassword </i> <br/> <br/> <b> Es importante respetar los espacios tal y como se muestra. </b> 
 
+Antes de pasar a la siguiente instalacion es necesario ejecutar el comando <i> sudo nano -w /etc/systemd/system/homeassistant.service  </i> y hacer el siguiente cambio:
+
+After=network-online.target ==> After=network-online.target mosquitto.service
+
 
 ## Instalacion Zigbee2MQTT
 
@@ -31,4 +35,4 @@ Una vez modificado, como siempre lo guardamos con <b> Ctrl + o </b> y salimos co
 
 [Unit] <br/> Description=zigbee2mqtt <br/> After=network.target <br/> <br/> [Service] <br/> ExecStart=/usr/bin/npm start <br/> WorkingDirectory=/opt/zigbee2mqtt <br/> StandardOutput=inherit <br/> StandardError=inherit <br/> Restart=always <br/> User=pi <br/> <br/> [Install] <br/> WantedBy=multi-user.target
 
-Una vez modificado, como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b> . Con esto acabara la instalacion de <b> Zigbee2MQTT </b> . Por ultimo para saber si la instalacion ha salido bien se puede usar el comando <i> sudo systemctl status zigbee2mqtt </i> , y si queremos ver la salida en tiempo real del mosquitto junto con la del Zigbee2MQTT para agregar los dispositivos, usamos el comando <i> mosquitto_sub -v -h IPRaspberry -p 1883 -t '#' </i>
+Una vez modificado, como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b> . Con esto acabara la instalacion de <b> Zigbee2MQTT </b> . Por ultimo para saber si la instalacion ha salido bien se puede usar el comando <i> sudo systemctl status zigbee2mqtt </i> , y si queremos ver la salida en tiempo real del <b> Mosquitto </b> junto con la del <b> Zigbee2MQTT </b> para agregar los dispositivos, usamos el comando <i> mosquitto_sub -v -h IPRaspberry -p 1883 -t '#' </i> .
