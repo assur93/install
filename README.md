@@ -15,5 +15,16 @@ De esta forma ya tenemos <b> Home Assistant </b> funcionando y de forma que se i
 
 Para la instalacion de <b> Mosquitto </b> tan solo es necesario descargar con <i> wget </i> el archivo <b> mosquito.sh </b> , convertirlo a ejecutable con <i> chmod 755 </i> y ejecutarlo. Casi al final de la instalacion nos pedira la contraseña para nuestro server mosquitto, tras introducirla la instalacion finalizara y ya estara instalado <b> Mosquitto </b> . ( El usuario por defecto es <i> insega </i> )
 
+Por ultimo, para activar el Mosquitto en Home Ass es necesario entrar en el archivo de configuracion:
+
+sudo –u homeassistant –H –s <br/> cd /home/homeassistant/.homeassistant <br/> nano configurations.yaml <br/> <br/>
+abrira un archivo en el cual se debe escribir:
+mqtt:
+  broker: ip
+  port: 1883
+  username: insega
+  password: insega
+
+
 ## Instalacion Zigbee2MQTT
 
