@@ -14,7 +14,7 @@ python3 -m venv .
 source bin/activate
 pip3 install homeassistant
 # Hass
-# cd
+cd
 # sudo nano -w /etc/systemd/system/homeassistant.service
 # sudo systemctl daemon-reload
 # sudo systemctl enable homeassistant
