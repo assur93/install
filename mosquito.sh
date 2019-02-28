@@ -14,3 +14,4 @@ sudo mosquitto_passwd -c passwds insega
 sudo systemctl enable mosquitto.service
 sudo systemctl start mosquitto.service
 sudo nano -w /etc/systemd/system/homeassistant.service 
+ls /dev/ttyACM0
