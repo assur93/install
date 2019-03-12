@@ -19,7 +19,7 @@ Tras introducir la contraseña se abrira un cuadro de texto en el que hay que ha
 
 Una vez modificado, como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b> .
 
-Por ultimo, para activar el Mosquitto en Home Ass es necesario entrar en el archivo de configuracion:
+Por ultimo, para activar el <b> Mosquitto </b> en <b> Homeassistant </b>t es necesario entrar en el archivo de configuracion:
 
 sudo –u homeassistant –H –s <br/> cd /home/homeassistant/.homeassistant <br/> nano configurations.yaml <br/> <br/>
 Se abrira un archivo en el cual se debe escribir en cualquier linea: <br/> <br/> mqtt: <br/> &nbsp;&nbsp; broker: IPRaspberry <br/> &nbsp;&nbsp; port: 1883 <br/> &nbsp;&nbsp; username: insega <br/> &nbsp;&nbsp; password: <i> YourPassword </i> <br/> <br/> <b> Es importante respetar los espacios tal y como se muestra. </b> 
