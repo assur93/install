@@ -71,40 +71,40 @@ Para añadir la camara directa de la Raspberry, seleccionamos la opcion <i> add 
 
 ## Instalacion OpenALPR en local
 
-Install prerequisites
+Instalar los prerrequisitos
 
 <i> sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev <br/>
 sudo apt-get install liblog4cplus-dev libcurl3-dev </i>
 
-If using the daemon, install beanstalkd
+Si se utiliza daemon instalar beanstalkd
 
 <i> sudo apt-get install beanstalkd </i>
 
-Clone the latest code from GitHub
+Clonar el ultimo codigo de Git
 
 <i> git clone https://github.com/openalpr/openalpr.git </i>
 
-Setup the build directory
+Establecer el directorio de compilacion
 
 <i> cd openalpr/src <br/>
 mkdir build <br/>
 cd build </i>
 
-setup the compile environment
+Establecer el entorno de compilacion
 
 <i> cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc .. <br/>
 cmake -DWITH_TEST=FALSE -DWITH_BINDING_JAVA=FALSE --DWITH_BINDING_PYTHON=FALSE \
   --DWITH_BINDING_GO=FALSE -DWITH_DAEMON=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr .. </i>
 
-compile the library
+Compilar la libreria
 
 <i> make </i>
 
-Install the binaries/libraries to your local system (prefix is /usr)
+Instalar los binarios en el sistema
 
 <i> sudo make install </i>
 
-Test the library
+Probar la libreria
 
 <i> wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg <br/>
 alpr lp.jpg </i>
