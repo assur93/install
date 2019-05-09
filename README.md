@@ -4,17 +4,20 @@
 
 Para configurar el teclado en Español es necesario ejecutar los siguientes comandos:
 
-Ejecuta el comando sudo <i> sudo dpkg-reconfigure locales </i>. Aparecerá una lista de las codificaciones disponibles.
+Ejecuta el comando <i> sudo dpkg-reconfigure locales </i>. Aparecerá una lista de las codificaciones disponibles.
 Busca español de España <b> (es_ES) </b>, preferiblemente con codificación <b> UTF-8 </b> y pulsa la barra espaciadora para seleccionarlo. Se recomienda no eliminar el inglés de Reino Unido, aunque es una opción personal. Pulsa intro para continuar.
 Selecciona el idioma predeterminado de entre los que has marcado antes <b> (es_ES.UTF-8) </b> y pulsa intro. Se generarán los locales.
+
 A continuación elegiremos la configuración del teclado.
 
-Ejecuta sudo <i> dpkg-reconfigure keyboard-configuration </i>. Seleccionar <b> Generic 104-key PC </b>, pulsar intro para seleccionarlo. Una vez aparezca la siguiente ventana seleccionar <b> Other </b> y en la lista que se despliega seleccionar <b> Spanish </b>. Tras esto, seleccionar <b> The default for the keyboard layout </b> y por ultimo <b> No compose key </b>.
+Ejecuta <i> sudo dpkg-reconfigure keyboard-configuration </i>. Seleccionar <b> Generic 104-key PC </b>, pulsar intro para seleccionarlo. Una vez aparezca la siguiente ventana seleccionar <b> Other </b> y en la lista que se despliega seleccionar <b> Spanish </b>. Tras esto, seleccionar <b> The default for the keyboard layout </b> y por ultimo <b> No compose key </b>.
 
 Ahora vamos a elegir la zona horaria:
 
 Ejecuta <i> sudo dpkg-reconfigure tzdata </i>.
 Selecciona <b> Europa </b> y después <b> Madrid </b> o la zona horaria en la que te encuentres.
+
+Por ultimo solo queda reiniciar y ya estaria.
  
 
 ## Instalacion Home Assistant
