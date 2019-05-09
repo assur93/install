@@ -68,3 +68,41 @@ Una vez acabe la instalacion se puede acceder a <i> MotionEye </i> poniendo la I
 Para añadir la camara directa de la Raspberry, seleccionamos la opcion <i> add camera... </i> y en <i> Camera Type: Local MMAL Camera </i>. Activamos las opciones avanzadas y modificamos los parametros necesarios. 
 
 <b> Nota:</b> Para usar las notificaciones por <b> MQTT </b> es necesario tener instalado <b> mosquito.sh </b> y una vez instalado utilizamos la opcion <i> Run A Command </i> en la que debe escribirse el codigo: <i>  mosquitto_pub -h 192.168.31.xxx -u username -P password -t camaras/camara/movimiento -m "ON" </i>. 
+
+## Instalacion OpenALPR en local
+
+Install prerequisites
+
+<i> sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev
+sudo apt-get install liblog4cplus-dev libcurl3-dev </i>
+
+If using the daemon, install beanstalkd
+
+<i> sudo apt-get install beanstalkd </i>
+
+Clone the latest code from GitHub
+
+<i> git clone https://github.com/openalpr/openalpr.git </i>
+
+Setup the build directory
+
+<i> cd openalpr/src
+mkdir build
+cd build </i>
+
+setup the compile environment
+
+<i> cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc .. </i>
+
+compile the library
+
+<i> make </i>
+
+Install the binaries/libraries to your local system (prefix is /usr)
+
+<i> sudo make install </i>
+
+Test the library
+
+<i> wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg
+alpr lp.jpg </i>
