@@ -113,32 +113,42 @@ alpr lp.jpg </i>
 
 ## Instalacion de un Bot de Telegram
 
+Lo primero que se necesita es una cuenta en <b> Telegram </b>. Una vez que se tiene la cuenta se debe crear el <b> Bot </b>, para ello se tiene que buscar en la lista de contactos el contacto <b> BotFather </b> que tendra este aspecto:
 
+imagen bot
+
+Para crear un nuevo bot, iniciamos conversacion con /start y acto seguido creamos el bot con /newbot. Para completar la creacion nos pedira el nombre del bot y demas, los introducimos y finalmente saldra un mensaje en el que aparecera el token de nuestro bot. Ahora que tenemos creado el bot es necesario conectarlo con <b> Home Assistant </b>, par ello necesitamos primero saber el ID de nuestro chat de telegram. Para ello tenemos que buscar el contacto <b> IDBot </b> que tendra este aspecto:
+
+imagen idbot
+
+Al igual que antes solo tenemos que iniciar conversacion con /start y acto seguido utilizamos el comando /getid para obtener nuestra ID. Esta ID debemos guardarla. Si queremos que nos lleguen mensajes a un grupo con varias personas, lo que se necesita es, en primer lugar meter en el grupo de <b> Telegram </b> al bot y a las demas personas. Luego añadimos al <b> IDBot </b> y escribimos /getgroupid. El <b> IDBot </b> nos devolvera la ID del grupo que debemos guardar.
+
+Ahora debemos ir al `configuration.yaml` para integrar el bot:
+
+```bash
 telegram_bot:
   - platform: polling
-    api_key: 808231124:AAENvP4wH0XcjmFzbncOJdXG4KOvHdPgaGQ
+    api_key: YOUR_TOKEN
     allowed_chat_ids:
-      - 687404149
-      - 503693189
-      - -330424918
+      - ID_1
+      - ID_2
       
 notify:
   - platform: telegram
-    name: telegramhq
-    chat_id: 687404149
+    name: telegram1
+    chat_id: ID_1
 
   - platform: telegram
-    name: juan
-    chat_id: 503693189
+    name: grupo1
+    chat_id: ID_2
+```
+Y ahora editaremos el `automations.yaml` para poder enviar y recibir mensages asi como ejecutar ordenes y demas:
 
-  - platform: telegram
-    name: grupo
-    chat_id: -330424918
-
+```bash
 - id: '1557757478416'
   alias: telegrammsg
   trigger:
-  - entity_id: binary_sensor.switch_158d0002469ce2
+  - entity_id: SOME_SENSOR
     from: 'off'
     platform: state
     to: 'on'
@@ -149,13 +159,17 @@ notify:
         inline_keyboard:
         - Pasar:/30m, Apagar:/1h
       message: Luz de la cocina encendida
-    service: notify.telegramhq
+    service: notify.telegram1
   - data:
       data:
         inline_keyboard:
         - Pasar:/30m, Apagar:/1h
       message: Luz de la cocina encendida
-    service: notify.grupo
+    service: notify.grupo1
+```
+En esta automatizacion lo que se hace es que cuando se activa un trigger se envia un mensage junto con dos botones, uno con el texto `Apagar` y otro `Pasar`. Este se envia tanto al grupo como al chat individual.
+
+```bash    
 - id: '1557757478426'
   alias: Telegramcallback
   trigger:
@@ -177,4 +191,6 @@ notify:
     data_template:
       callback_query_id: '{{ trigger.event.data.id }}'
       message: Apagada Señor
+```
 
+En esta automatizacion lo que se hace es recibir la respuesta del boton `Apagar` y manda un comando por MQTT y ademas hace desaparecer los botones asi como manda un mensaje temporal de vuelta con la confirmacion de que se ha recibido la orden de apagar.
