@@ -1,0 +1,50 @@
+esphome:
+  name: puerta
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: "domotica"
+  password: "insega1993"
+  
+switch:
+  - platform: gpio
+    pin: D3
+    name: "gate"
+    id: gate
+
+  - platform: template
+    name: "Cerrar"
+    id: cerrar
+    turn_on_action:
+      - switch.turn_off: gate
+      - switch.turn_on: gate
+
+  - platform: template
+    name: "Abrir"
+    id: abrir
+    turn_on_action:
+      - switch.turn_off: gate
+      - switch.turn_on: gate
+      - delay: 50ms
+      - switch.turn_off: gate
+      - switch.turn_on: gate
+      
+binary_sensor:
+  - platform: homeassistant
+    name: "Puerta Principal"
+    entity_id: input_boolean.puertap
+    on_press:
+      then:
+        - switch.turn_on: abrir
+    on_release:
+      then:
+        - switch.turn_on: cerrar
+      
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
