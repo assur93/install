@@ -119,7 +119,7 @@ Lo primero que se necesita es una cuenta en <b> Telegram </b>. Una vez que se ti
 
 Para crear un nuevo bot, iniciamos conversacion con /start y acto seguido creamos el bot con /newbot. Para completar la creacion nos pedira el nombre del bot y demas, los introducimos y finalmente saldra un mensaje en el que aparecera el token de nuestro bot. Ahora que tenemos creado el bot es necesario conectarlo con <b> Home Assistant </b>, par ello necesitamos primero saber el ID de nuestro chat de telegram. Para ello tenemos que buscar el contacto <b> IDBot </b> que tendra este aspecto:
 
-![example](imagenes/example1.jpg)
+![example](imagenes/example2.jpg)
 
 Al igual que antes solo tenemos que iniciar conversacion con /start y acto seguido utilizamos el comando /getid para obtener nuestra ID. Esta ID debemos guardarla. Si queremos que nos lleguen mensajes a un grupo con varias personas, lo que se necesita es, en primer lugar meter en el grupo de <b> Telegram </b> al bot y a las demas personas. Luego añadimos al <b> IDBot </b> y escribimos /getgroupid. El <b> IDBot </b> nos devolvera la ID del grupo que debemos guardar.
 
