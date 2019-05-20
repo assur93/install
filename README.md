@@ -115,7 +115,7 @@ alpr lp.jpg </i>
 
 Lo primero que se necesita es una cuenta en <b> Telegram </b>. Una vez que se tiene la cuenta se debe crear el <b> Bot </b>, para ello se tiene que buscar en la lista de contactos el contacto <b> BotFather </b> que tendra este aspecto:
 
-![example](imagenes/example.jpg)
+![example](imagenes/example1.jpg)
 
 Para crear un nuevo bot, iniciamos conversacion con <i> /start </i> y acto seguido creamos el bot con <i> /newbot </i>. Para completar la creacion nos pedira el nombre del bot y demas, los introducimos y finalmente saldra un mensaje en el que aparecera el token de nuestro bot. Ahora que tenemos creado el bot es necesario conectarlo con <b> Home Assistant </b>, par ello necesitamos primero saber el ID de nuestro chat de telegram. Para ello tenemos que buscar el contacto <b> IDBot </b> que tendra este aspecto:
 
