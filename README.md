@@ -1,5 +1,6 @@
 # Instalacion rapida 
 
+
 ## Configuracion teclado en Español
 
 Para configurar el teclado en Español es necesario ejecutar los siguientes comandos:
@@ -109,3 +110,71 @@ Probar la libreria
 
 <i> wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg <br/>
 alpr lp.jpg </i>
+
+## Instalacion de un Bot de Telegram
+
+
+telegram_bot:
+  - platform: polling
+    api_key: 808231124:AAENvP4wH0XcjmFzbncOJdXG4KOvHdPgaGQ
+    allowed_chat_ids:
+      - 687404149
+      - 503693189
+      - -330424918
+      
+notify:
+  - platform: telegram
+    name: telegramhq
+    chat_id: 687404149
+
+  - platform: telegram
+    name: juan
+    chat_id: 503693189
+
+  - platform: telegram
+    name: grupo
+    chat_id: -330424918
+
+- id: '1557757478416'
+  alias: telegrammsg
+  trigger:
+  - entity_id: binary_sensor.switch_158d0002469ce2
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      data:
+        inline_keyboard:
+        - Pasar:/30m, Apagar:/1h
+      message: Luz de la cocina encendida
+    service: notify.telegramhq
+  - data:
+      data:
+        inline_keyboard:
+        - Pasar:/30m, Apagar:/1h
+      message: Luz de la cocina encendida
+    service: notify.grupo
+- id: '1557757478426'
+  alias: Telegramcallback
+  trigger:
+  - event_data:
+      data: /1h
+    event_type: telegram_callback
+    platform: event
+  action:
+  - data:
+      payload: apagada
+      topic: cameras/time
+    service: mqtt.publish
+  - service: telegram_bot.edit_replymarkup
+    data_template:
+      message_id: '{{ trigger.event.data.message.message_id }}'
+      chat_id: '{{ trigger.event.data.user_id }}'
+      inline_keyboard: []
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: Apagada Señor
+
