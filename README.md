@@ -205,4 +205,4 @@ Comprobar que la version de Python es igual o superior a la 2.7.X. Luego ejecuta
 `
 wget https://bootstrap.pypa.io/get-pip.py sudo python2 get-pip.py ` <br/> ` sudo pip2 install esphome ` <br/>
 
-Y si no ha habido errores ejecutar `esphome config/ dashboard` y abrir la <b> IPRaspberry:6052 </b>.
+Y si no ha habido errores ejecutar `esphome config/ dashboard` y abrir la <b> IPRaspberry:6052 </b>. Una vez dentro configurar el dispositivo como wemos D1 y por nombre el que queramos, y por ultimo editar el archivo y copiar el codigo del archivo <b> codeESP8266 </b>.
