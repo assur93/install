@@ -194,3 +194,18 @@ En esta automatizacion lo que se hace es que cuando se activa un trigger se envi
 ```
 
 En esta automatizacion lo que se hace es recibir la respuesta del boton `Apagar` y manda un comando por MQTT y ademas hace desaparecer los botones asi como manda un mensaje temporal de vuelta con la confirmacion de que se ha recibido la orden de apagar.
+
+## Instalacion ESPHome
+
+Tan solo es necesario introducir los siguientes comandos:
+`
+sudo apt-get update
+sudo apt-get install python
+python2 --version`
+
+Comprobar que la version de Python es igual o superior a la 2.7.X. Luego ejecutar:
+`
+wget https://bootstrap.pypa.io/get-pip.py sudo python2 get-pip.py
+sudo pip2 install esphome `
+
+Y si no ha habido errores ejecutar `esphome config/ dashboard` y abrir la <b> IPRaspberry:6052 </b>.
