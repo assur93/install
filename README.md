@@ -75,6 +75,7 @@ Para añadir la camara directa de la Raspberry, seleccionamos la opcion <i> add 
 Instalar los prerrequisitos
 
 <i> sudo apt-get install cmake <br/>
+sudo apt-get update && sudo apt-get install -y openalpr openalpr-daemon openalpr-utils libopenalpr-dev <br/>
 sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev <br/>
 sudo apt-get install liblog4cplus-dev libcurl3-dev </i>
 
@@ -94,9 +95,11 @@ cd build </i>
 
 Establecer el entorno de compilacion
 
-<i> cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc .. <br/>
+```bash
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc ..
 cmake -DWITH_TEST=FALSE -DWITH_BINDING_JAVA=FALSE --DWITH_BINDING_PYTHON=FALSE \
-  --DWITH_BINDING_GO=FALSE -DWITH_DAEMON=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr .. </i>
+  --DWITH_BINDING_GO=FALSE -DWITH_DAEMON=FALSE -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
+```
 
 Compilar la libreria
 
