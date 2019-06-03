@@ -74,24 +74,32 @@ Para añadir la camara directa de la Raspberry, seleccionamos la opcion <i> add 
 
 Instalar los prerrequisitos
 
-<i> sudo apt-get install cmake <br/>
+```bash
+sudo apt-get install cmake <br/>
 sudo apt-get update && sudo apt-get install -y openalpr openalpr-daemon openalpr-utils libopenalpr-dev <br/>
 sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev <br/>
-sudo apt-get install liblog4cplus-dev libcurl3-dev </i>
+sudo apt-get install liblog4cplus-dev libcurl3-dev
+```
 
 Si se utiliza daemon instalar beanstalkd
 
-<i> sudo apt-get install beanstalkd </i>
+```bash
+sudo apt-get install beanstalkd
+```
 
 Clonar el ultimo codigo de Git
 
-<i> git clone https://github.com/openalpr/openalpr.git </i>
+```bash
+git clone https://github.com/openalpr/openalpr.git
+```
 
 Establecer el directorio de compilacion
 
-<i> cd openalpr/src <br/>
-mkdir build <br/>
-cd build </i>
+```bash
+cd openalpr/src
+mkdir build
+cd build
+```
 
 Establecer el entorno de compilacion
 
@@ -103,16 +111,22 @@ cmake -DWITH_TEST=FALSE -DWITH_BINDING_JAVA=FALSE --DWITH_BINDING_PYTHON=FALSE \
 
 Compilar la libreria
 
-<i> make </i>
+```bash
+make
+```
 
 Instalar los binarios en el sistema
 
-<i> sudo make install </i>
+```bash
+sudo make install
+```
 
 Probar la libreria
 
-<i> wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg <br/>
-alpr lp.jpg </i>
+```bash
+wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg
+alpr lp.jpg
+```
 
 ## Instalacion de un Bot de Telegram
 
