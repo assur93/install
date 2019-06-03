@@ -74,7 +74,7 @@ Para añadir la camara directa de la Raspberry, seleccionamos la opcion <i> add 
 
 Instalar los prerrequisitos
 
-<i> sudo apt-get install cmake 
+<i> sudo apt-get install cmake <br/>
 sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev <br/>
 sudo apt-get install liblog4cplus-dev libcurl3-dev </i>
 
