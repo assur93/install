@@ -241,7 +241,8 @@ python2 --version
 
 Comprobar que la version de Python es igual o superior a la 2.7.X. Luego ejecutar: <br/>
 ```bash
-wget https://bootstrap.pypa.io/get-pip.py sudo python2 get-pip.py
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python2 get-pip.py
 sudo pip2 install esphome
 ```
 
