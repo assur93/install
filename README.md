@@ -232,11 +232,17 @@ En esta automatizacion lo que se hace es recibir la respuesta del boton `Apagar`
 ## Instalacion ESPHome
 
 Tan solo es necesario introducir los siguientes comandos: <br/>
-`
-sudo apt-get update ` <br/> ` sudo apt-get install python `<br/> ` python2 --version` <br/>
+
+```bash
+sudo apt-get update
+sudo apt-get install python
+python2 --version
+```
 
 Comprobar que la version de Python es igual o superior a la 2.7.X. Luego ejecutar: <br/>
-`
-wget https://bootstrap.pypa.io/get-pip.py sudo python2 get-pip.py ` <br/> ` sudo pip2 install esphome ` <br/>
+```bash
+wget https://bootstrap.pypa.io/get-pip.py sudo python2 get-pip.py
+sudo pip2 install esphome
+```
 
 Y si no ha habido errores ejecutar `esphome config/ dashboard` y abrir la <b> IPRaspberry:6052 </b>. Una vez dentro configurar el dispositivo como wemos D1 y por nombre el que queramos, y por ultimo editar el archivo y copiar el codigo del archivo <b> codeESP8266 </b>.
