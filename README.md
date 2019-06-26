@@ -260,10 +260,10 @@ mkdir custom_components
 cd custom_component
 mkdir beok
 cd beok
-wget 
-wget 
+wget https://raw.githubusercontent.com/assur93/install/master/beok/climate.py
+wget https://raw.githubusercontent.com/assur93/install/master/beok/__init__.py
 ``` 
-y ya está. Despues de esto sol quedaria ir a la carpeta <b> configuration.yaml </b> y copiar el siguiente codigo:
+Despues de esto solo quedaria ir a la carpeta <b> configuration.yaml </b> y copiar el siguiente codigo:
 
 ```bash
 climate:
@@ -272,5 +272,5 @@ climate:
     mac: "xx:xx:xx:xx"
     host: 192.168.xx.xxx
 ``` 
-Para sacar la MAC y la IP, agregamos el termo al wifi, para ello, lo conectamos a corriente, presionamos la flecha abajo <b> \/ </b> y despues el boton de encender, parpadearan las opciones. Con el boton M cambiamos hasta que aparezca la opcion FAC, en esa opcion presionamos la flecha arriba hasta que el numero pase de 8 a 10. Apagamos y luego salimos del modo de configuracion presionando la flecha abajo y despues el boton de encender. Una vez hecho esto el simbolo del wifi parpadea, en este momento vamos a la app de Beok y añadimos el termostato. Una vez añadido abrimos en el navegador la pagina del router y vemos en los dispositivos conectados la IP y la MAC del beok.
+Para sacar la MAC y la IP, agregamos el termo al wifi, para ello, lo conectamos a corriente, presionamos la flecha abajo y despues el boton de encender, parpadearan las opciones. Con el boton M cambiamos hasta que aparezca la opcion FAC, en esa opcion presionamos la flecha arriba hasta que el numero pase de 8 a 10. Apagamos y luego salimos del modo de configuracion presionando la flecha abajo y despues el boton de encender. Una vez hecho esto el simbolo del wifi parpadea, en este momento vamos a la app de Beok y añadimos el termostato. Una vez añadido abrimos en el navegador la pagina del router y vemos en los dispositivos conectados la IP y la MAC del beok.
 
