@@ -60,7 +60,16 @@ sudo –u homeassistant –H –s
 cd /home/homeassistant/.homeassistant 
 nano configuration.yaml
 ```
-Se abrira un archivo en el cual se debe escribir en cualquier linea: <br/> <br/> mqtt: <br/> &nbsp;&nbsp; broker: IPRaspberry <br/> &nbsp;&nbsp; port: 1883 <br/> &nbsp;&nbsp; username: insega <br/> &nbsp;&nbsp; password: <i> YourPassword </i> <br/> <br/> <b> Es importante respetar los espacios tal y como se muestra. </b> 
+Se abrira un archivo en el cual se debe escribir en cualquier linea:
+
+```bash
+mqtt:
+  broker: IPRaspberry
+  port: 1883
+  username: insega
+  password: YourPassword
+```  
+<b> Es importante respetar los espacios tal y como se muestra. </b> 
 
 
 ## Instalacion Zigbee2MQTT
