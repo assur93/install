@@ -248,3 +248,29 @@ sudo pip2 install esphome
 ```
 
 Y si no ha habido errores ejecutar `esphome config/ dashboard` y abrir la <b> IPRaspberry:6052 </b>. Una vez dentro configurar el dispositivo como wemos D1 y por nombre el que queramos, y por ultimo editar el archivo y copiar el codigo del archivo <b> codeESP8266 </b>.
+
+## Instalacion Beok
+
+Lo primero sera descargar todos los archivos de la carpeta <b> beok </b> y pegar las 6 carpetas en el siguiente directorio de la Raspberry usando el WinSC: <b> /srv/homeassistant/lib/python3.5/site-packages </b>.
+
+Una vez copiado sera necesario copiar el archivo climate.py dentro de la carpeta <b> custom_componets/beok </b>, para ello ejecutar el siguiente codigo (omitir los <b> mkdir </b> en caso de tener las carpetas creadas).
+
+```bash
+mkdir custom_components
+cd custom_component
+mkdir beok
+cd beok
+wget 
+wget 
+``` 
+y ya está. Despues de esto sol quedaria ir a la carpeta <b> configuration.yaml </b> y copiar el siguiente codigo:
+
+```bash
+climate:
+  - platform: beok
+    friendly_name: termostato
+    mac: "xx:xx:xx:xx"
+    host: 192.168.xx.xxx
+``` 
+Para sacar la MAC y la IP, agregamos el termo al wifi, para ello, lo conectamos a corriente, presionamos la flecha abajo <b> \/ </b> y despues el boton de encender, parpadearan las opciones. Con el boton M cambiamos hasta que aparezca la opcion FAC, en esa opcion presionamos la flecha arriba hasta que el numero pase de 8 a 10. Apagamos y luego salimos del modo de configuracion presionando la flecha abajo y despues el boton de encender. Una vez hecho esto el simbolo del wifi parpadea, en este momento vamos a la app de Beok y añadimos el termostato. Una vez añadido abrimos en el navegador la pagina del router y vemos en los dispositivos conectados la IP y la MAC del beok.
+
