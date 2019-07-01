@@ -84,6 +84,13 @@ Una vez modificado, como siempre lo guardamos con <b> Ctrl + o </b> y salimos co
 
 Una vez modificado, como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b> . Con esto acabara la instalacion de <b> Zigbee2MQTT </b> . Por ultimo para saber si la instalacion ha salido bien se puede usar el comando <i> sudo systemctl status zigbee2mqtt </i> , y si queremos ver la salida en tiempo real del <b> Mosquitto </b> junto con la del <b> Zigbee2MQTT </b> para agregar los dispositivos, usamos el comando ```mosquitto_sub -v -h IPRaspberry -p 1883 -t '#'```.
 
+Para cambiar el nombre de los dispositivos <b> Zigbee2MQTT </b> es necesario introducir el siguente comando:
+
+```bash
+nano /opt/zigbee2mqtt/data/configuration.yaml
+```
+Y en el archivo cambiar el <b>friendly_name</b>.
+
 
 ## Instalacion MotionEye
 
