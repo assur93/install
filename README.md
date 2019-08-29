@@ -273,7 +273,7 @@ Una vez copiado sera necesario copiar el archivo climate.py dentro de la carpeta
 
 ```bash
 mkdir custom_components
-cd custom_component
+cd custom_components
 mkdir beok
 cd beok
 wget https://raw.githubusercontent.com/assur93/install/master/beok/climate.py
