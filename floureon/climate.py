@@ -1,250 +1,333 @@
-"""
-Support for Chinese wifi thermostats (Floureon, Beok, Beca Energy).
-
-For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/climate.broadlink/
-"""
+import asyncio
 import logging
+import time
+import broadlink
+from datetime import timedelta
+from datetime import datetime
+from socket import timeout
+from typing import List, Optional
 
 import voluptuous as vol
 
-from homeassistant.components.climate import PLATFORM_SCHEMA, ClimateDevice
+from homeassistant.components.climate import ClimateDevice, PLATFORM_SCHEMA
+from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.util.temperature import convert as convert_temperature
 from homeassistant.components.climate.const import (
-    DOMAIN, STATE_AUTO, STATE_HEAT, SUPPORT_AWAY_MODE, SUPPORT_OPERATION_MODE,
-    SUPPORT_TARGET_TEMPERATURE)
+    HVAC_MODE_OFF,
+    HVAC_MODE_HEAT,
+    HVAC_MODE_AUTO,
+    CURRENT_HVAC_OFF,
+    CURRENT_HVAC_HEAT,
+    CURRENT_HVAC_IDLE,
+    PRESET_NONE,
+    PRESET_AWAY,
+    SUPPORT_TARGET_TEMPERATURE,
+    SUPPORT_PRESET_MODE,
+    DEFAULT_MIN_TEMP,
+    DEFAULT_MAX_TEMP
+)
+
 from homeassistant.const import (
-    ATTR_ENTITY_ID, ATTR_TEMPERATURE, CONF_FRIENDLY_NAME, CONF_HOST, CONF_MAC,
-    PRECISION_HALVES, STATE_OFF, TEMP_CELSIUS)
+    PRECISION_HALVES,
+    ATTR_TEMPERATURE,
+    PRECISION_HALVES,
+    TEMP_CELSIUS,
+    CONF_NAME
+)
+
+from homeassistant.helpers.event import (
+    async_track_time_interval
+)
+
 import homeassistant.helpers.config_validation as cv
-
-
-REQUIREMENTS = ['BroadlinkWifiThermostat==2.4.1']
-
-CONF_EXTERNAL_TEMP = 'external_temp'
-CONF_AWAY_TEMP = 'away_temp'
-
-ATTR_LOOP_MODE = 'loop_mode'
-ATTR_SEN = 'sen'
-ATTR_OSV = 'osv'
-ATTR_DIF = 'dif'
-ATTR_SVH = 'svh'
-ATTR_SVL = 'svl'
-ATTR_ADJ = 'adj'
-ATTR_FRE = 'freeze'
-ATTR_PON = 'pon'
-
-ATTR_WEEK_START_1 = 'week_start_1'
-ATTR_WEEK_STOP_1 = 'week_stop_1'
-ATTR_WEEK_START_2 = 'week_start_2'
-ATTR_WEEK_STOP_2 = 'week_stop_2'
-ATTR_WEEK_START_3 = 'week_start_3'
-ATTR_WEEK_STOP_3 = 'week_stop_3'
-
-ATTR_WEEKEND_START = 'weekend_start'
-ATTR_WEEKEND_STOP = 'weekend_stop'
-ATTR_AWAY_TEMP = 'away_temp'
-ATTR_HOME_TEMP = 'home_temp'
-
-SERVICE_SET_SCHEDULE = 'broadlink_set_schedule'
-SERVICE_SET_ADVANCED_CONF = 'broadlink_set_advanced_conf'
-
-# Validation of the user's configuration
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_HOST): cv.string,
-    vol.Required(CONF_MAC): cv.string,
-    vol.Required(CONF_FRIENDLY_NAME): cv.string,
-    vol.Optional(CONF_EXTERNAL_TEMP, default=False): cv.boolean,
-    vol.Optional(CONF_AWAY_TEMP, default=12): vol.Coerce(float),
-    vol.Optional(ATTR_LOOP_MODE, default=0): vol.Coerce(int)
-})
-
-SET_SCHEDULE_SCHEMA = vol.Schema({
-    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-    vol.Required(ATTR_WEEK_START_1): cv.time,
-    vol.Required(ATTR_WEEK_STOP_1): cv.time,
-    vol.Required(ATTR_WEEK_START_2): cv.time,
-    vol.Required(ATTR_WEEK_STOP_2): cv.time,
-    vol.Required(ATTR_WEEK_START_3): cv.time,
-    vol.Required(ATTR_WEEK_STOP_3): cv.time,
-    vol.Required(ATTR_WEEKEND_START): cv.time,
-    vol.Required(ATTR_WEEKEND_STOP): cv.time,
-    vol.Required(ATTR_HOME_TEMP): vol.Coerce(float),
-    vol.Required(ATTR_AWAY_TEMP): vol.Coerce(float)
-})
-
-SET_ADVANCED_CONF_SCHEMA = vol.Schema({
-    vol.Required(ATTR_ENTITY_ID): cv.entity_ids,
-    vol.Required(ATTR_LOOP_MODE, default=0): vol.Coerce(int),
-    vol.Required(ATTR_SEN, default=0): vol.Coerce(int),
-    vol.Required(ATTR_OSV, default=42): vol.Coerce(int),
-    vol.Required(ATTR_DIF, default=2): vol.Coerce(int),
-    vol.Required(ATTR_SVH, default=35): vol.Coerce(int),
-    vol.Required(ATTR_SVL, default=5): vol.Coerce(int),
-    vol.Required(ATTR_ADJ, default=0.1): vol.Coerce(float),
-    vol.Required(ATTR_FRE, default=0): vol.Coerce(int),
-    vol.Required(ATTR_PON, default=0): vol.Coerce(int)
-})
 
 _LOGGER = logging.getLogger(__name__)
 
+DEFAULT_SCHEDULE = 1
+DEFAULT_USE_EXTERNAL_TEMP = False
 
-def setup_platform(hass, config, async_add_entities,
-                   discovery_info=None):
-    """Set up the broadlink thermostat platform."""
-    import BroadlinkWifiThermostat
-    wifi_thermostat = BroadlinkWifiThermostat.\
-        Thermostat(config[CONF_MAC],
-                   config[CONF_HOST],
-                   config[CONF_FRIENDLY_NAME],
-                   config[CONF_EXTERNAL_TEMP],
-                   config[CONF_AWAY_TEMP])
+CONF_HOST = 'host'
+CONF_MAC = 'mac'
+CONF_USE_EXTERNAL_TEMP = 'use_external_temp'
+CONF_SCHEDULE = 'schedule'
 
-    thermostats = [BroadlinkThermostat(wifi_thermostat)]
+BROADLINK_ACTIVE = 1
+BROADLINK_IDLE = 0
+BROADLINK_POWER_ON = 1
+BROADLINK_POWER_OFF = 0
+BROADLINK_MODE_AUTO = 1
+BROADLINK_MODE_MANUAL = 0
+BROADLINK_SENSOR_INTERNAL = 0
+BROADLINK_SENSOR_EXTERNAL = 1
+BROADLINK_SENSOR_BOTH = 2
 
-    async_add_entities(thermostats, True)
-
-    def set_schedule(service):
-        """Handle data for the set_schedule service call."""
-        entity_id = service.data.get(ATTR_ENTITY_ID)
-        if entity_id:
-            target_thermostats = [device for device in thermostats
-                                  if device.entity_id in entity_id]
-        else:
-            target_thermostats = thermostats
-
-        schedules = dict()
-        schedules['week_start_1'] = service.data.get(ATTR_WEEK_START_1)
-        schedules['week_stop_1'] = service.data.get(ATTR_WEEK_STOP_1)
-        schedules['week_start_2'] = service.data.get(ATTR_WEEK_START_2)
-        schedules['week_stop_2'] = service.data.get(ATTR_WEEK_STOP_2)
-        schedules['week_start_3'] = service.data.get(ATTR_WEEK_START_3)
-        schedules['week_stop_3'] = service.data.get(ATTR_WEEK_STOP_3)
-
-        schedules['weekend_start'] = service.data.get(ATTR_WEEKEND_START)
-        schedules['weekend_stop'] = service.data.get(ATTR_WEEKEND_STOP)
-        schedules['away_temp'] = service.data.get(ATTR_AWAY_TEMP)
-        schedules['home_temp'] = service.data.get(ATTR_HOME_TEMP)
-
-        for thermostat in target_thermostats:
-            thermostat.set_schedule(schedules)
-
-    hass.services.register(DOMAIN, SERVICE_SET_SCHEDULE,
-                           set_schedule, schema=SET_SCHEDULE_SCHEMA)
-
-    def set_advanced_conf(service):
-        """Handle data for the set_advanced_conf service call."""
-        entity_id = service.data.get(ATTR_ENTITY_ID)
-        if entity_id:
-            target_thermostats = [device for device in thermostats
-                                  if device.entity_id in entity_id]
-        else:
-            target_thermostats = thermostats
-
-        advance_conf = dict()
-        advance_conf["loop_mode"] = service.data.get(ATTR_LOOP_MODE)
-        advance_conf['sen'] = service.data.get(ATTR_SEN)
-        advance_conf['osv'] = service.data.get(ATTR_OSV)
-        advance_conf['dif'] = service.data.get(ATTR_DIF)
-        advance_conf['svh'] = service.data.get(ATTR_SVH)
-        advance_conf['svl'] = service.data.get(ATTR_SVL)
-        advance_conf['adj'] = service.data.get(ATTR_ADJ)
-        advance_conf['fre'] = service.data.get(ATTR_FRE)
-        advance_conf['pon'] = service.data.get(ATTR_PON)
-        target_thermostats.set_advanced_config(advance_conf)
-
-    hass.services.register(DOMAIN, SERVICE_SET_ADVANCED_CONF,
-                           set_advanced_conf, schema=SET_SCHEDULE_SCHEMA)
+PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_MAC): cv.string,
+    vol.Required(CONF_NAME): cv.string,
+    vol.Optional(CONF_SCHEDULE, default=DEFAULT_SCHEDULE): vol.Coerce(int),
+    vol.Optional(CONF_USE_EXTERNAL_TEMP, default=DEFAULT_USE_EXTERNAL_TEMP): cv.boolean,
+})
 
 
-class BroadlinkThermostat(ClimateDevice):
-    """Representation of a Broadlink Thermostat device."""
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    """Set up the generic thermostat platform."""
+    async_add_entities([BroadlinkThermostat(hass, config)])
 
-    def __init__(self, device):
-        """Initialize the climate device."""
-        self._device = device
-        device.set_time()
+
+class BroadlinkThermostat(ClimateDevice, RestoreEntity):
+
+    def __init__(self, hass, config):
+        self.hass = hass
+        self._name = config.get(CONF_NAME)
+        self._host = config.get(CONF_HOST)
+        self._port = 80
+        self._mac = bytes.fromhex(''.join(reversed(config.get(CONF_MAC).split(':'))))
+        self._use_external_temp = config.get(CONF_USE_EXTERNAL_TEMP)
+
+        self._min_temp = DEFAULT_MIN_TEMP
+        self._max_temp = DEFAULT_MAX_TEMP
+        self._away_temp = DEFAULT_MIN_TEMP
+        self._manual_temp = DEFAULT_MIN_TEMP
+
+        self._preset_mode = None
+
+        self._thermostat_loop_mode = config.get(CONF_SCHEDULE)
+        self._thermostat_current_action = None
+        self._thermostat_current_mode = None
+        self._thermostat_current_temp = None
+        self._thermostat_target_temp = None
+
+    def thermostat(self):
+        return broadlink.gendevice(0x4EAD, (self._host, self._port), self._mac)
+
+    def thermostat_get_sensor(self):
+        """Get sensor to use"""
+        return BROADLINK_SENSOR_EXTERNAL if self._use_external_temp is True else BROADLINK_SENSOR_INTERNAL
+
+    def thermostat_set_time(self):
+        """Set thermostat time"""
+        try:
+            device = self.thermostat()
+            if device.auth():
+                now = datetime.now()
+                device.set_time(now.hour,
+                                now.minute,
+                                now.second,
+                                now.weekday() + 1)
+        except timeout:
+            _LOGGER.error("Thermostat %s set_time timeout.", self._name)
+        except Exception:
+            _LOGGER.error("Thermostat %s set_time error.", self._name)
+
+    def thermostat_read_status(self):
+        """Read thermostat data"""
+        try:
+            device = self.thermostat()
+            if device.auth():
+                data = device.get_full_status()
+
+                # Thermostat temperatures
+                if self._use_external_temp is True:
+                    self._thermostat_current_temp = data['external_temp']
+                else:
+                    self._thermostat_current_temp = data['room_temp']
+
+                # self._hysteresis = int(data['dif'])
+                self._min_temp = int(data['svl'])
+                self._max_temp = int(data['svh'])
+                self._thermostat_target_temp = data['thermostat_temp']
+
+                # Thermostat modes & status
+                if data["power"] == BROADLINK_POWER_OFF:
+                    # Unset away mode
+                    self._preset_mode = PRESET_NONE
+                    self._thermostat_current_mode = HVAC_MODE_OFF
+                else:
+                    if data["auto_mode"] == BROADLINK_MODE_AUTO:
+                        # Unset away mode
+                        self._preset_mode = PRESET_NONE
+                        self._thermostat_current_mode = HVAC_MODE_AUTO
+                    elif data["auto_mode"] == BROADLINK_MODE_MANUAL:
+                        self._thermostat_current_mode = HVAC_MODE_HEAT
+
+                # Thermostat action
+                if data["power"] == BROADLINK_POWER_ON and data["active"] == BROADLINK_ACTIVE:
+                    self._thermostat_current_action = CURRENT_HVAC_HEAT
+                elif data["power"] == BROADLINK_POWER_ON and data["active"] == BROADLINK_IDLE:
+                    self._thermostat_current_action = CURRENT_HVAC_IDLE
+                elif data["power"] == BROADLINK_POWER_OFF:
+                    self._thermostat_current_action = CURRENT_HVAC_OFF
+        except Exception:
+            pass
+            # _LOGGER.warning("Thermostat %s read_status timeout", self._name)
 
     @property
-    def state(self):
-        """Return climate state."""
-        return self._device.state
+    def name(self) -> str:
+        """Return thermostat name"""
+        return self._name
 
     @property
-    def supported_features(self):
-        """Return the list of supported features."""
-        return SUPPORT_TARGET_TEMPERATURE | SUPPORT_OPERATION_MODE \
-                                          | SUPPORT_AWAY_MODE
+    def precision(self) -> float:
+        """Return the precision of the system."""
+        return PRECISION_HALVES
 
     @property
-    def name(self):
-        """Return the name of the thermostat."""
-        return self._device.name
-
-    @property
-    def temperature_unit(self):
+    def temperature_unit(self) -> str:
         """Return the unit of measurement."""
         return TEMP_CELSIUS
 
     @property
-    def current_temperature(self):
-        """Return the sensor temperature."""
-        return self._device.current_temp
+    def hvac_mode(self) -> str:
+        """Return hvac operation ie. heat, cool mode.
+        Need to be one of HVAC_MODE_*.
+        """
+        return self._thermostat_current_mode
 
     @property
-    def target_temperature(self):
+    def hvac_modes(self) -> List[str]:
+        """Return the list of available hvac operation modes.
+        Need to be a subset of HVAC_MODES.
+        """
+        return [HVAC_MODE_AUTO, HVAC_MODE_HEAT, HVAC_MODE_OFF]
+
+    @property
+    def hvac_action(self) -> Optional[str]:
+        """Return the current running hvac operation if supported.
+        Need to be one of CURRENT_HVAC_*.
+        """
+        return self._thermostat_current_action
+
+    @property
+    def preset_mode(self) -> Optional[str]:
+        """Return the current preset mode, e.g., home, away, temp.
+        Requires SUPPORT_PRESET_MODE.
+        """
+        return self._preset_mode
+
+    @property
+    def preset_modes(self) -> Optional[List[str]]:
+        """Return a list of available preset modes.
+        Requires SUPPORT_PRESET_MODE.
+        """
+        return [PRESET_AWAY, PRESET_NONE]
+
+    @property
+    def current_temperature(self) -> Optional[float]:
+        """Return the current temperature."""
+        return self._thermostat_current_temp
+
+    @property
+    def target_temperature(self) -> Optional[float]:
         """Return the temperature we try to reach."""
-        return self._device.target_temperature
+        return self._thermostat_target_temp
 
     @property
-    def current_operation(self):
-        """Return current operation."""
-        return self._device.current_operation
+    def supported_features(self):
+        """Return the list of supported features."""
+        return SUPPORT_TARGET_TEMPERATURE | SUPPORT_PRESET_MODE
 
     @property
-    def operation_list(self):
-        """List of available operation modes."""
-        return [STATE_AUTO, STATE_HEAT, STATE_OFF]
+    def min_temp(self) -> float:
+        """Return the minimum temperature."""
+        return convert_temperature(self._min_temp, TEMP_CELSIUS,
+                                   self.temperature_unit)
 
     @property
-    def is_away_mode_on(self):
-        """Return if away mode is on."""
-        return self._device.away
+    def max_temp(self) -> float:
+        """Return the maximum temperature."""
+        return convert_temperature(self._max_temp, TEMP_CELSIUS,
+                                   self.temperature_unit)
 
     @property
-    def is_on(self):
-        """Return true if the device is on."""
-        return not self._device.current_operation == STATE_OFF
+    def device_state_attributes(self):
+        """Return the attribute(s) of the sensor"""
+        return {
+            'away_temp': self._away_temp,
+            'manual_temp': self._manual_temp
+        }
 
-    @property
-    def precision(self):
-        """Return the precision of the system."""
-        return PRECISION_HALVES
+    async def async_added_to_hass(self) -> None:
+        """Run when entity about to added."""
+        await super().async_added_to_hass()
 
-    def set_temperature(self, **kwargs):
+        # Set thermostat time
+        self.thermostat_set_time()
+
+        # Restore
+        last_state = await self.async_get_last_state()
+
+        if last_state is not None:
+            if 'away_temp' in last_state.attributes:
+                self._away_temp = last_state.attributes['away_temp']
+            if 'manual_temp' in last_state.attributes:
+                self._manual_temp = last_state.attributes['manual_temp']                
+
+    async def async_set_temperature(self, **kwargs) -> None:
         """Set new target temperature."""
         if kwargs.get(ATTR_TEMPERATURE) is not None:
-            self._device.set_temperature(kwargs.get(ATTR_TEMPERATURE))
+            target_temp = float(kwargs.get(ATTR_TEMPERATURE))
+            try:
+                device = self.thermostat()
+                if device.auth():
+                    # device.set_power(BROADLINK_POWER_ON)
+                    device.set_mode(BROADLINK_MODE_MANUAL, self._thermostat_loop_mode, self.thermostat_get_sensor())
+                    device.set_temp(target_temp)        
 
-    def set_operation_mode(self, operation_mode):
+                    # Save temperatures for future use
+                    if self._preset_mode == PRESET_AWAY:
+                        self._away_temp = target_temp
+                    elif self._preset_mode == PRESET_NONE:
+                        self._manual_temp = target_temp
+            except timeout:
+                _LOGGER.error("Thermostat %s set_temperature timeout", self._name)
+
+        await self.async_update_ha_state()
+
+    async def async_set_hvac_mode(self, hvac_mode) -> None:
         """Set operation mode."""
-        self._device.set_operation_mode(operation_mode)
+        try:
+            device = self.thermostat()
+            if device.auth():
+                if hvac_mode == HVAC_MODE_OFF:
+                    device.set_power(BROADLINK_POWER_OFF)
+                else:
+                    device.set_power(BROADLINK_POWER_ON)                    
+                    if hvac_mode == HVAC_MODE_AUTO:
+                        device.set_mode(BROADLINK_MODE_AUTO, self._thermostat_loop_mode, self.thermostat_get_sensor())
+                    elif hvac_mode == HVAC_MODE_HEAT:
+                        device.set_mode(BROADLINK_MODE_MANUAL, self._thermostat_loop_mode, self.thermostat_get_sensor())
+        except timeout:
+            _LOGGER.error("Thermostat %s set_hvac_mode timeout", self._name)
 
-    def set_schedule(self, schedules):
-        """Set automatic schedule."""
-        self._device.set_schedule(schedules)
+        await self.async_update_ha_state()
 
-    def set_advanced_config(self, advanced_conf):
-        """Set advanced configuration."""
-        self._device.set_advanced_config(self, advanced_conf)
+    async def async_set_preset_mode(self, preset_mode) -> None:
+        """Set new preset mode."""
+        self._preset_mode = preset_mode
+                
+        try:
+            device = self.thermostat()
+            if device.auth():
+                device.set_power(BROADLINK_POWER_ON)
+                device.set_mode(BROADLINK_MODE_MANUAL, self._thermostat_loop_mode, self.thermostat_get_sensor())
+                if self._preset_mode == PRESET_AWAY:
+                    device.set_temp(self._away_temp)  
+                elif self._preset_mode == PRESET_NONE:
+                    device.set_temp(self._manual_temp)
+        except timeout:
+            _LOGGER.error("Thermostat %s set_preset_mode timeout", self._name)
 
-    def turn_away_mode_on(self):
-        """Turn away mode on."""
-        self._device.set_away(True)
+        await self.async_update_ha_state()
 
-    def turn_away_mode_off(self):
-        """Turn away mode off."""
-        self._device.set_away(False)
+    async def async_turn_off(self) -> None:
+        """Turn thermostat off"""
+        await self.async_set_hvac_mode(HVAC_MODE_OFF)
 
-    def update(self):
-        """Update component data."""
-        self._device.read_status()
+    async def async_turn_on(self) -> None:
+        """Turn thermostat on"""
+        await self.async_set_hvac_mode(HVAC_MODE_AUTO)
+
+    async def async_update(self) -> None:
+        """Get thermostat info"""
+        self.thermostat_read_status()
