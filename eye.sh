@@ -2,11 +2,17 @@
 cd 
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get install ffmpeg v4l-utils
-sudo apt-get install libmariadbclient18 libpq5
-wget https://github.com/Motion-Project/motion/releases/download/release-4.1.1/pi_stretch_motion_4.1.1-1_armhf.deb
-sudo dpkg -i pi_stretch_motion_4.1.1-1_armhf.deb
-sudo apt-get install python-pip python-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libz-dev
+sudo apt-get install ffmpeg
+sudo apt-get install libmariadb3
+sudo apt-get install libpq5
+sudo apt-get install libmicrohttpd12
+wget https://github.com/Motion-Project/motion/releases/download/release-4.2.2/pi_buster_motion_4.2.2-1_armhf.deb
+sudo dpkg -i pi_buster_motion_4.2.2-1_armhf.deb
+sudo apt-get install python-pip
+sudo apt-get install python-dev libssl-dev
+sudo apt-get install libcurl4-openssl-dev
+sudo apt-get install libjpeg-dev
+sudo apt-get install libz-dev
 sudo pip install motioneye #lo hace
 sudo mkdir -p /etc/motioneye
 sudo cp /usr/local/share/motioneye/extra/motioneye.conf.sample /etc/motioneye/motioneye.conf
