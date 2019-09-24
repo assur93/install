@@ -111,8 +111,13 @@ Instalar los prerrequisitos
 sudo apt-get install cmake
 sudo apt-get update
 sudo apt-get install -y openalpr openalpr-daemon openalpr-utils libopenalpr-dev
-sudo apt-get install libopencv-dev libtesseract-dev git cmake build-essential libleptonica-dev
-sudo apt-get install liblog4cplus-dev libcurl3-dev
+sudo apt-get install libopencv-dev
+sudo apt-get install libtesseract-dev
+sudo apt-get install git
+sudo apt-get install build-essential
+sudo apt-get install libleptonica-dev
+sudo apt-get install liblog4cplus-dev
+sudo apt-get install libcurl3-dev
 ```
 
 Si se utiliza daemon instalar beanstalkd
