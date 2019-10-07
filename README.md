@@ -266,9 +266,15 @@ Comprobar que la version de Python es igual o superior a la 2.7.X. Luego ejecuta
 wget https://bootstrap.pypa.io/get-pip.py
 sudo python2 get-pip.py
 sudo pip2 install esphome
+sudo apt-get install git
+sudo apt-get install python-dev python-setuptools 
+sudo apt-get install libjpeg-dev
+git clone https://github.com/python-pillow/Pillow.git
+cd Pillow
+python setup.py install
 ```
 
-Y si no ha habido errores ejecutar `esphome config/ dashboard` y abrir la <b> IPRaspberry:6052 </b>. Una vez dentro configurar el dispositivo como wemos D1 y por nombre el que queramos, y por ultimo editar el archivo y copiar el codigo del archivo <b> codeESP8266 </b>.
+Y si no ha habido errores ejecutar `esphome config/ dashboard` (en caso de error de required, ir al archivo que pone y borrar lo de required) y abrir la <b> IPRaspberry:6052 </b>. Una vez dentro configurar el dispositivo como wemos D1 y por nombre el que queramos, y por ultimo editar el archivo y copiar el codigo del archivo <b> codeESP8266 </b>.
 
 ## Instalacion Beok
 
