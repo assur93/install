@@ -170,6 +170,23 @@ wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg
 alpr lp.jpg
 ```
 
+Una vez probada la libreria, instalamos OpenALPR en Home Assistnat
+```bash
+image_processing:
+  - platform: openalpr_local
+    region: eu
+    source:
+    - entity_id: camera.camara
+```
+Para integrar la camara en Home Assistant lo mejor es utilizar mjpeg:
+```bash
+camera:
+  - platform: mjpeg
+    mjpeg_url: http://192.xxx.xxx.xxx:xxx/stream
+    name: ground floor
+```
+
+
 ## Instalacion de un Bot de Telegram
 
 Lo primero que se necesita es una cuenta en <b> Telegram </b>. Una vez que se tiene la cuenta se debe crear el <b> Bot </b>, para ello se tiene que buscar en la lista de contactos el contacto <b> BotFather </b> que tendra este aspecto:
