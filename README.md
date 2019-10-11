@@ -110,7 +110,10 @@ Instalar los prerrequisitos
 ```bash
 sudo apt-get install cmake
 sudo apt-get update
-sudo apt-get install -y openalpr openalpr-daemon openalpr-utils libopenalpr-dev
+sudo apt-get install openalpr 
+sudo apt-get install openalpr-daemon 
+sudo apt-get install openalpr-utils 
+sudo apt-get install libopenalpr-dev
 sudo apt-get install libopencv-dev
 sudo apt-get install libtesseract-dev
 sudo apt-get install git
