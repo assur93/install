@@ -177,15 +177,42 @@ image_processing:
     region: eu
     source:
     - entity_id: camera.camara
+      name: entrada
 ```
-Para integrar la camara en Home Assistant lo mejor es utilizar mjpeg:
+Para integrar la camara en Home Assistant con MotionEye lo mejor es utilizar mjpeg:
 ```bash
 camera:
   - platform: mjpeg
     mjpeg_url: http://192.xxx.xxx.xxx:xxx/stream
-    name: ground floor
+    name: camara
+```
+En caso de que funcione ffmpeg se integra de forma:
+
+```bash
+ffmpeg:
+  ffmpeg_bin: /usr/bin/ffmpeg
+camera:
+  - platform: ffmpeg
+    input: rtsp://ipdetucamara:554/onvif1
+    name: camara
 ```
 
+Y para la automatizacion al detectar una matricula:
+```bash
+- id: '1561983915446'
+  alias: matricula2
+  trigger:
+  - platform: event
+    event_type: image_processing.found_plate
+    event_data:
+      entity_id: image_processing.entrada
+      plate: 2093GSW
+  condition: []
+  action:
+  - data:
+      entity_id: switch.porton1
+    service: switch.turn_on
+```
 
 ## Instalacion de un Bot de Telegram
 
