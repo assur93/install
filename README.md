@@ -202,11 +202,16 @@ Y para la automatizacion al detectar una matricula:
 - id: '1561983915446'
   alias: matricula2
   trigger:
-  - platform: event
-    event_type: image_processing.found_plate
-    event_data:
+  - event_data:
       entity_id: image_processing.entrada
       plate: 2093GSW
+    event_type: image_processing.found_plate
+    platform: event
+  - event_data:
+      entity_id: image_processing.entrada
+      plate: 3685HDP
+    event_type: image_processing.found_plate
+    platform: event
   condition: []
   action:
   - data:
