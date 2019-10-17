@@ -353,3 +353,45 @@ climate:
 ``` 
 Para sacar la <b>MAC</b> y la <b>IP</b>, agregamos el termo al wifi, para ello, lo conectamos a corriente, presionamos la flecha abajo y despues el boton de encender, parpadearan las opciones. Con el boton <b>M</b> cambiamos hasta que aparezca la opcion <b>FAC</b>, en esa opcion presionamos la flecha arriba hasta que el numero pase de 8 a 10. Apagamos y luego salimos del modo de configuracion presionando la flecha abajo y despues el boton de encender. Una vez hecho esto el simbolo del wifi parpadea, en este momento vamos a la <b>app</b> de <b>Beok</b> y añadimos el termostato. Una vez añadido abrimos en el navegador la pagina del router y vemos en los dispositivos conectados la <b>IP</b> y la <b>MAC</b> del beok.
 
+## Instalacion DuckDns y certificado HTTPS
+
+Lo primero sera entrar en https://www.duckdns.org e ingresar utilizando la cuenta de Gmail. Una vez iniciada sesion, añadimos un dominio con ```bash add domain ```. Una vez añadido el domain pinchamos en ```bash install ``` y seleccionamos ```bash pi ```, nos apareceran en la parte de abajo las instrucciones a seguir. Lo unico, es sustituir la linea ```bash vi duck.sh ``` por ```bash nano duck.sh ``` ya que este editor es mejor.
+
+Una vez instalado todo pasamos a instalar el certificado <b>HTTPS</b>, para ello ejecutaremos las siguientes instrucciones en orden:
+
+```bash
+sudo apt-get install git
+sudo su -s/bin/bash homeassistant
+cd ..
+cd homeassistant
+git clone https://github.com/lukas2511/dehydrated.git
+cd dehydrated
+nano domains.txt
+```
+Y en el archivo que se genera pegamos el dominio que creamos antes ```bash dominio.duckdns.org``` y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b>. Ahora creamos otro archivo con la instruccion ```bash nano config ``` y en el pegamos el siguiente texto:
+
+```bash
+# Which challenge should be used? Currently http-01 and dns-01 are supported 
+CHALLENGETYPE="dns-01" 
+# Script to execute the DNS challenge and run after cert generation 
+HOOK="${BASEDIR}/hook.sh"
+```
+Y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b>.
+Es necesario crear otro archivo con ```bash nano hook.sh ``` y en el pegamos el siguiente texto:
+
+```bash 
+
+```
+Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```bash chmod 755 hook.sh ```.
+Ahora ejecutamos la instruccion ```bash ./dehydrated --register --accept-terms``` y esperamos hasta que aparezca <b>Done!</b> en pantalla.
+Ahora ejecutamos la instruccion ```bash ./dehydrated -c``` y esperamos hasta que nos pida la contraseña de admin de HA, en este punto salimos pulsando <b> Ctrl + c </b> .
+Ahora ejecutamos la instruccion ```bash crontab -e``` y en el editor que sale al final de todo pegamos la siguiente linea ```bash 0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c``` y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b>.
+Por ultimo solo tenemos que ir a alchivo de configuracion de HA ```bash configuration.yaml``` y añadir el siguente texto:
+```bash 
+http:
+  ssl_certificate: /home/homeassistant/dehydrated/certs/xxxxxxxxx.duckdns.org/fullchain.pem
+  ssl_key: /home/homeassistant/dehydrated/certs/<b>xxxxxxxxx</b>.duckdns.org/privkey.pem
+  base_url: https://xxxxxxx.duckdns.org:8123
+```
+reiniciamos HA, para ello primero salimos con ```bash cexit``` y reiniciamos con ```bash sudo systemctl restart homeassistant```.
+Si todo ha salido bien la pagina deberia ser accesible desde https://<b>dominio</b>.duckdns.org:8123
