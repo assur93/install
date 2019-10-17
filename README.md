@@ -355,6 +355,36 @@ Para sacar la <b>MAC</b> y la <b>IP</b>, agregamos el termo al wifi, para ello, 
 
 ## Configuracion Router Multicolor
 
+Lo primero es entrar en el router accediendo a la IP de configuracion, por lo general la IP suele ser ```192.168.0.1```
+Y meter el usuario y la contraseña que suelen venir debajo del router, en caso negativo, llamar a la compañia.
+
+Una vez en el router desactivar el wifi, tanto el 2,4G como el 5G.
+
+![example](imagenes/wifi.png)
+
+Una vez desactivado, cambiar el modo del router de  ```Legacy RG IPv4 Mode``` a ```Disable Mode```
+
+![example](imagenes/puente.png)
+
+<b>Para volver al estado inicial solo tenemos que volver a cambiar el modo del router y volver a  activar el wifi</b>
+
+
+## Configuracion Router Xiaomi
+
+
+Lo primero es entrar en el router accediendo a la IP de configuracion ```192.168.31.1``` y meter la contraseña ```insega1993```.
+
+Una vez en el router traducimos la pagina y vamos a <b> Ajustes avanzados > Reenvio de puertos </b> <i>(o algo similar)</i>. Una vez en este punto solo tenemos que presionar en <b>Agregar regla</b> y redireccionar los puertos <b> 8123 , 80 , 443 </b> usando la siguiente estructura:
+```bash
+Indicar Nombre
+Seleccionar: TCP y UDP
+Puerto Externo: 8123
+Dirección IP Interna: 25
+Puerto Interno: 8123
+```
+
+Y asi con los otros 2 puertos. Una vez acabado ya estaria.
+
 
 
 ## Instalacion DuckDns y certificado HTTPS
