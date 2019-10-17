@@ -414,7 +414,37 @@ Y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b
 Es necesario crear otro archivo con ```nano hook.sh``` y en el pegamos el siguiente texto:
 
 ```bash 
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
 
+domain="sgil19"
+token="e8dbd8cf-707a-4a22-8d29-9953a503f00d"
+
+case "$1" in
+    "deploy_challenge")
+        curl "https://www.duckdns.org/update?domains=$domain&token=$token&txt=$4"
+        echo
+        ;;
+    "clean_challenge")
+        curl "https://www.duckdns.org/update?domains=$domain&token=$token&txt=removed&clear=true"
+        echo
+        ;;
+    "deploy_cert")
+        sudo systemctl restart homeassistant.service
+        ;;
+    "unchanged_cert")
+        ;;
+    "startup_hook")
+        ;;
+    "exit_hook")
+        ;;
+    *)
+        echo Unknown hook "${1}"
+        exit 0
+        ;;
+esac
 ```
 Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```chmod 755 hook.sh```.
 Ahora ejecutamos la instruccion ```./dehydrated --register --accept-terms``` y esperamos hasta que aparezca <b>Done!</b> en pantalla.
