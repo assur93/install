@@ -387,7 +387,11 @@ Ahora ejecutamos la instruccion ```./dehydrated --register --accept-terms``` y e
 
 Ahora ejecutamos la instruccion ```./dehydrated -c``` y esperamos hasta que nos pida la contraseña de admin de HA, en este punto salimos pulsando <b> Ctrl + c </b> .
 
-Ahora ejecutamos la instruccion ```crontab -e``` y en el editor que sale al final de todo pegamos la siguiente linea ```0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c``` y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b>.
+Ahora ejecutamos la instruccion ```crontab -e``` y en el editor que sale al final de todo pegamos la siguiente linea 
+
+```0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c```
+
+y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b>.
 
 Por ultimo solo tenemos que ir a alchivo de configuracion de HA ```configuration.yaml``` y añadir el siguente texto:
 
