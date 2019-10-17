@@ -355,7 +355,7 @@ Para sacar la <b>MAC</b> y la <b>IP</b>, agregamos el termo al wifi, para ello, 
 
 ## Instalacion DuckDns y certificado HTTPS
 
-Lo primero sera entrar en https://www.duckdns.org e ingresar utilizando la cuenta de Gmail. Una vez iniciada sesion, añadimos un dominio con ```bash add domain ```. Una vez añadido el domain pinchamos en ```install``` y seleccionamos ```pi```, nos apareceran en la parte de abajo las instrucciones a seguir. Lo unico, es sustituir la linea ```vi duck.sh``` por ```nano duck.sh``` ya que este editor es mejor.
+Lo primero sera entrar en https://www.duckdns.org e ingresar utilizando la cuenta de Gmail. Una vez iniciada sesion, añadimos un dominio con ```add domain```. Una vez añadido el domain pinchamos en ```install``` y seleccionamos ```pi```, nos apareceran en la parte de abajo las instrucciones a seguir. Lo unico, es sustituir la linea ```vi duck.sh``` por ```nano duck.sh``` ya que este editor es mejor.
 
 Una vez instalado todo pasamos a instalar el certificado <b>HTTPS</b>, para ello ejecutaremos las siguientes instrucciones en orden:
 
