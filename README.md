@@ -353,6 +353,10 @@ climate:
 ``` 
 Para sacar la <b>MAC</b> y la <b>IP</b>, agregamos el termo al wifi, para ello, lo conectamos a corriente, presionamos la flecha abajo y despues el boton de encender, parpadearan las opciones. Con el boton <b>M</b> cambiamos hasta que aparezca la opcion <b>FAC</b>, en esa opcion presionamos la flecha arriba hasta que el numero pase de 8 a 10. Apagamos y luego salimos del modo de configuracion presionando la flecha abajo y despues el boton de encender. Una vez hecho esto el simbolo del wifi parpadea, en este momento vamos a la <b>app</b> de <b>Beok</b> y añadimos el termostato. Una vez añadido abrimos en el navegador la pagina del router y vemos en los dispositivos conectados la <b>IP</b> y la <b>MAC</b> del beok.
 
+## Configuracion Router Multicolor
+
+
+
 ## Instalacion DuckDns y certificado HTTPS
 
 Lo primero sera entrar en https://www.duckdns.org e ingresar utilizando la cuenta de Gmail. Una vez iniciada sesion, añadimos un dominio con ```add domain```. Una vez añadido el domain pinchamos en ```install``` y seleccionamos ```pi```, nos apareceran en la parte de abajo las instrucciones a seguir. Lo unico, es sustituir la linea ```vi duck.sh``` por ```nano duck.sh``` ya que este editor es mejor.
