@@ -24,8 +24,9 @@ Shelly 2.5 :
      payload_on: "on"
      payload_off: "off"
      retain: true
-     
+```    
 Shelly 1:
+```bash
   - platform: mqtt
     name: "nombre"
     state_topic: "shellies/shelly1-BA6AC1/relay/0"
@@ -34,7 +35,8 @@ Shelly 1:
     payload_on: "on"
     payload_off: "off"
     retain: false
-    ``` 
+
+```
     
 shellyswitch25-xxxxx => Esto se ve en la página donde configuras el mosquito, es el Will Topic, depende de cada shelly.
 “nombre” => Este es el nombre que le das al shelly y que luego usas para llamarlo, puedes poner cualquiera, pero no puede llevar mayúsculas ni caracteres raros, solo letras y guiones bajos.
