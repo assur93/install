@@ -16,14 +16,14 @@
 
 Shelly 2.5 :
 ```bash
--   platform: mqtt
-     name: "nombre"
-     state_topic: "shellies/shellyswitch25-BA8CE8/relay/0"
-     command_topic: "shellies/shellyswitch25-BA8CE8/relay/0/command"
-     qos: 1
-     payload_on: "on"
-     payload_off: "off"
-     retain: true
+  - platform: mqtt
+    name: "nombre"
+    state_topic: "shellies/shellyswitch25-BA8CE8/relay/0"
+    command_topic: "shellies/shellyswitch25-BA8CE8/relay/0/command"
+    qos: 1
+    payload_on: "on"
+    payload_off: "off"
+    retain: true
 ```    
 Shelly 1:
 ```bash
