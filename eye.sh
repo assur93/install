@@ -22,3 +22,4 @@ sudo systemctl daemon-reload
 sudo systemctl enable motioneye
 sudo systemctl start motioneye
 cd
+vcngencmd get_camera
