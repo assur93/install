@@ -527,7 +527,7 @@ Despues de esto se debe abrir el ```automations.yaml``` y añadir las siguientes
  ```
  
  Despues de esto copiar el archivo ```coche.py``` en el directorio ```/home/pi```. Despues editarlo y cambiar la linea: 
-  ```publish.single('matricula', (s), hostname='192.168.XX.XXX') ``` en la que se debe poner la IP de la Raspberry y la linea ```SECRET_KEY = 'sk_779f3b5259c0893e57ceccc5'``` en la que se debe poner la clave de ALPR.
+  ```publish.single('matricula', (s), hostname='192.168.XX.XXX') ``` en la que se debe poner la IP de la Raspberry y la linea ```SECRET_KEY = 'sk_779f3b5259c0893e57cexxxxx'``` en la que se debe poner la clave de ALPR.
   
   Para añadir matriculas solo se deben añadir ```triggers```en la automatizacion.
 
