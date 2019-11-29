@@ -468,3 +468,67 @@ http:
 reiniciamos HA, para ello primero salimos con ```exit``` y reiniciamos con ```sudo systemctl restart homeassistant```.
 
 Si todo ha salido bien la pagina deberia ser accesible desde https://<b>xxxxxxx</b>.duckdns.org:8123
+
+
+## Instalacion Acceso con Matricula
+
+Lo primero que se debe hacer es instalar la libreria  ```mqtt.paho``` mediante el comando:
+
+```sudo pip install pahp-mqtt```
+
+Despues de esto se debe abrir el ```configuration.yaml``` y añadir las siguientes lineas:
+
+```bash 
+homeassistant:    
+  whitelist_external_dirs:
+    - /tmp
+    
+shell_command:
+  foto: python /home/pi/coche.py
+  
+camera:
+  - platform: mjpeg
+    name: entrada
+    mjpeg_url: http://192.168.31.10:8081
+    
+```
+
+Despues de esto se debe abrir el ```automations.yaml``` y añadir las siguientes lineas:
+
+```bash 
+- id: '1575022412320'
+  alias: coche
+  description: ''
+  trigger:
+  - payload: 'ON'
+    platform: mqtt
+    topic: camaras/camara/movimiento
+  condition: []
+  action:
+  - data:
+      entity_id: camera.entrada
+      filename: /tmp/your.jpg
+    service: camera.snapshot
+  - delay: 00:00:01
+  - service: shell_command.foto
+  
+- id: '1575026803891'
+  alias: aporton
+  description: ''
+  trigger:
+  - payload: 8996JNV
+    platform: mqtt
+    topic: matricula
+  condition: []
+  action:
+  - data:
+      entity_id: switch.luz1
+    service: switch.turn_on    
+ ```
+ 
+ Despues de esto copiar el archivo ```coche.py``` en el directorio ```/home/pi```. Despues editarlo y cambiar la linea: 
+  ```publish.single('matricula', (s), hostname='192.168.XX.XXX') ``` en la que se debe poner la IP de la Raspberry y la linea ```SECRET_KEY = 'sk_779f3b5259c0893e57ceccc5'``` en la que se debe poner la clave de ALPR.
+  
+  Para añadir matriculas solo se deben añadir ```triggers```en la automatizacion.
+
+
