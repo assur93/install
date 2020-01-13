@@ -533,3 +533,31 @@ Despues de esto se debe abrir el ```automations.yaml``` y añadir las siguientes
   Para añadir matriculas solo se deben añadir ```triggers```en la automatizacion.
 
 
+## Instalacion Acceso con RFID
+
+Instalacion previa de librerias:
+
+```bash 
+sudo apt install mariadb-server
+sudo apt-get install python-mysql.connector
+pip install paho-mqtt 
+```
+Una vez instaladas las librerias se accede a la BBDD con:
+
+```sudo mysql -u root -p -h localhost```
+
+Una vez dentro se ejecutan los siguientes comandos:
+
+```bash
+	
+CREATE DATABASE ofi;
+USE ofi;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'insega1993';
+GRANT ALL PRIVILEGES ON ofi.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+quit
+```
+
+Reiniciar la BBDD con la instruccion 	```sudo service mysql restart```
+
+Por ultimo abrir y ejecutar el archivo ```dbofi.py``` segun las especificaciones.
