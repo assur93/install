@@ -548,8 +548,7 @@ Una vez instaladas las librerias se accede a la BBDD con:
 
 Una vez dentro se ejecutan los siguientes comandos:
 
-```bash
-	
+```bash	
 CREATE DATABASE ofi;
 USE ofi;
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'insega1993';
