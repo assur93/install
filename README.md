@@ -579,7 +579,9 @@ cd /home/pi/ofibase
 sudo python ./mqttofi.py &
 cd
 ```
-Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```chmod 755 ejecutable.sh```.
+Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion:
+
+```chmod 755 ejecutable.sh```
 
 Finalmente para que se ejecute cada vez que se inicie la PI ejecutamos:
 
