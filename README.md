@@ -569,7 +569,7 @@ wget https://raw.githubusercontent.com/assur93/install/master/mqttofi.py
 Una vez tenemos la carpeta, creamos un ejecutable para que cada vez que se inicie la PI se ejecupe el archivo
 
 ```bash
-sudo nano ejecutable.sh
+nano ejecutable.sh
 ```
 Y dentro del ejecutable pegamos el siguiente codigo:
 
