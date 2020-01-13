@@ -560,4 +560,34 @@ quit
 
 Reiniciar la BBDD con la instruccion 	```sudo service mysql restart```
 
-Por ultimo abrir y ejecutar el archivo ```dbofi.py``` segun las especificaciones.
+Por ultimo abrir y ejecutar el archivo ```dbofi.py``` segun las especificaciones. Una vez echo esto la BBDD ya esta operativa y tan solo queda ligarla con MQTT para que funcione el sistema. Para ello se crea y se entra en la carpeta ```ofibase``` con el comando:
+
+```bash
+sudo mkdir /home/pi/ofibase
+cd /home/pi/ofibase
+```
+Una vez tenemos la carpeta, creamos un ejecutable para que cada vez que se inicie la PI se ejecupe el archivo
+
+```bash
+sudo nano ejecutable.sh
+```
+Y dentro del ejecutable pegamos el siguiente codigo:
+
+```bash
+cd /
+cd /home/pi/ofibase/
+sudo python ./mqttofi.py &
+cd /
+```
+Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```chmod 755 ejecutable.sh```.
+
+Finalmente para que se ejecute cada vez que se inicie la PI ejecutamos:
+
+```bash
+sudo nano /etc/rc.local
+```
+Y dentro del archivo, a continuacion de fi ponemos
+
+```bash
+sudo sh '/home/pi/ofibase/ejecutable.sh'
+```
