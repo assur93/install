@@ -549,9 +549,9 @@ Una vez añadido se ejecuta un restart ```sudo systemctl restart homeassistant``
 sudo apt-get install python-libxml2 libxml2-dev libxslt1-dev
 sudo pip install lxml
 ```
-La ultima intruccion tarda bastante tiempo y necesita bastantes recursos, por eso se para previamente Homeassistant.
+La ultima instruccion tarda bastante tiempo y necesita bastantes recursos, por eso se para previamente Homeassistant.
 
-Una vez tenemos instaladas las librerias, tenemos que ir a la pagina de [desarroyo de Spotify]( https://developer.spotify.com/dashboard/applications), acceder con el usuario y contraseña, crear un nuevo proyecto, y dentro del proyecto en ```edit settings``` añadimos una nueba <b>Redirect URIs</b> del estilo ```https://xxxxxxxxxxxxxxxx.ui.nabu.casa/lovelace/8``` siendo 8, el numero de la pestaña a la que querramos que redirija. Una vez guardados los cambios, mostramos la <b>Client Secret</b> y la copiamos, ya que nos hara falta para despues.
+Una vez tenemos instaladas las librerias, tenemos que ir a la pagina de [desarroyo de Spotify]( https://developer.spotify.com/dashboard/applications), acceder con el usuario y contraseña, crear un nuevo proyecto, y dentro del proyecto en ```edit settings``` añadimos una nueva <b>Redirect URIs</b> del estilo ```https://xxxxxxxxxxxxxxxx.ui.nabu.casa/lovelace/8``` siendo 8, el numero de la pestaña a la que querramos que redirija. Una vez guardados los cambios, mostramos la <b>Client Secret</b> y la copiamos, ya que nos hara falta para despues.
 
 Ahora que tenemos todo listo, solo queda crear la carta, para ello copiamos el archivo ```spotify-card.js``` en la carpeta ```www/ ``` y añadir en el ```ui-lovelace.yaml``` lo siguiente:
 
