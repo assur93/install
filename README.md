@@ -535,7 +535,7 @@ Despues de esto se debe abrir el ```automations.yaml``` y añadir las siguientes
 
 ## Instalacion Spotify en Chromecast
 
-Primero se copia la carpeta Spotcast dentro de custom_components y en el ```configuration.yaml``` se añade lo siguiente:
+Primero se copia la carpeta [spotcast](https://github.com/assur93/install/tree/master/Instalacion/spotify) dentro de custom_components y en el ```configuration.yaml``` se añade lo siguiente:
 
 ```bash
 spotcast:
@@ -553,7 +553,7 @@ La ultima instruccion tarda bastante tiempo y necesita bastantes recursos, por e
 
 Una vez tenemos instaladas las librerias, tenemos que ir a la pagina de [desarroyo de Spotify]( https://developer.spotify.com/dashboard/applications), acceder con el usuario y contraseña, crear un nuevo proyecto, y dentro del proyecto en ```edit settings``` añadimos una nueva <b>Redirect URIs</b> del estilo ```https://xxxxxxxxxxxxxxxx.ui.nabu.casa/lovelace/8``` siendo 8, el numero de la pestaña a la que querramos que redirija. Una vez guardados los cambios, mostramos la <b>Client Secret</b> y la copiamos, ya que nos hara falta para despues.
 
-Ahora que tenemos todo listo, solo queda crear la carta, para ello copiamos el archivo ```spotify-card.js``` en la carpeta ```www/ ``` y añadir en el ```ui-lovelace.yaml``` lo siguiente:
+Ahora que tenemos todo listo, solo queda crear la carta, para ello copiamos el archivo [```spotify-card.js```](https://github.com/assur93/install/tree/master/Instalacion/spotify) en la carpeta ```www/ ``` y añadir en el ```ui-lovelace.yaml``` lo siguiente:
 
 ```bash
   - url: /local/spotify-card.js
