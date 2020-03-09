@@ -533,6 +533,46 @@ Despues de esto se debe abrir el ```automations.yaml``` y añadir las siguientes
   Para añadir matriculas solo se deben añadir ```triggers```en la automatizacion.
 
 
+## Instalacion Spotify en Chromecast
+
+Primero se copia la carpeta Spotcast dentro de custom_components y en el ```configuration.yaml``` se añade lo siguiente:
+
+```bash
+spotcast:
+  username: damian@insega.es
+  password: xxxxxxx
+```
+
+Una vez añadido se ejecuta un restart ```sudo systemctl restart homeassistant``` y una vez que reinicie se para con el comando: ```sudo systemctl stop homeassistant```y se instalan las siguientes librerias:
+
+```bash
+sudo apt-get install python-libxml2 libxml2-dev libxslt1-dev
+sudo pip install lxml
+```
+La ultima intruccion tarda bastante tiempo y necesita bastantes recursos, por eso se para previamente Homeassistant.
+
+Una vez tenemos instaladas las librerias, tenemos que ir a la pagina de [desarroyo de Spotify]( https://developer.spotify.com/dashboard/applications), acceder con el usuario y contraseña, crear un nuevo proyecto, y dentro del proyecto en ```edit settings``` añadimos una nueba <b>Redirect URIs</b> del estilo ```https://xxxxxxxxxxxxxxxx.ui.nabu.casa/lovelace/8``` siendo 8, el numero de la pestaña a la que querramos que redirija. Una vez guardados los cambios, mostramos la <b>Client Secret</b> y la copiamos, ya que nos hara falta para despues.
+
+Ahora que tenemos todo listo, solo queda crear la carta, para ello copiamos el archivo ```spotify-card.js``` en la carpeta ```www/ ``` y añadir en el ```ui-lovelace.yaml``` lo siguiente:
+
+```bash
+  - url: /local/spotify-card.js
+    type: module
+```
+
+y donde queramos poner la carta copiamos lo siguiente:
+
+```bash
+- type: 'custom:spotify-card'
+  client_id: "xxxxxxxxxxxxxx"
+```
+siendo la <b>client_id</b> la <b>Client Secret</b>.
+
+Al iniciar Homeassistant en el navegador se nos abrira la pagina de Spotify para poner el usuario y la contraseña, y una vez puesto nos redirige de nuevo a Homeassistant. Al utilizar cache, este paso no sera necesario mas ya que la contraseña se guarda.
+    
+ 
+
+
 ## Instalacion Acceso con RFID
 
 Instalacion previa de librerias:
