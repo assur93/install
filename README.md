@@ -396,14 +396,12 @@ Una vez instalado todo pasamos a instalar el certificado <b>HTTPS</b>, para ello
 
 ```bash
 sudo apt-get install git
-sudo su -s/bin/bash homeassistant
-cd ..
-cd homeassistant
-git clone https://github.com/lukas2511/dehydrated.git
+cd docker/homeassistant
+sudo git clone https://github.com/lukas2511/dehydrated.git
 cd dehydrated
-nano domains.txt
+sudo nano domains.txt
 ```
-Y en el archivo que se genera pegamos el dominio que creamos antes ```dominio.duckdns.org``` y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b>. Ahora creamos otro archivo con la instruccion ```nano config``` y en el pegamos el siguiente texto:
+Y en el archivo que se genera pegamos el dominio que creamos antes ```dominio.duckdns.org``` y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b>. <br/> Ahora creamos otro archivo con la instruccion ```sudo nano config``` y en el pegamos el siguiente texto:
 
 ```bash
 # Which challenge should be used? Currently http-01 and dns-01 are supported 
@@ -411,8 +409,8 @@ CHALLENGETYPE="dns-01"
 # Script to execute the DNS challenge and run after cert generation 
 HOOK="${BASEDIR}/hook.sh"
 ```
-Y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b>.
-Es necesario crear otro archivo con ```nano hook.sh``` y en el pegamos el siguiente texto:
+Y como siempre lo guardamos con <b> Ctrl + o </b> y salimos con <b> Ctrl + c </b>. <br/>
+Es necesario crear otro archivo con ```sudo nano hook.sh``` y en el pegamos el siguiente texto:
 
 ```bash 
 #!/usr/bin/env bash
@@ -433,7 +431,7 @@ case "$1" in
         echo
         ;;
     "deploy_cert")
-        sudo systemctl restart homeassistant.service
+        sudo docker restart homeassistant
         ;;
     "unchanged_cert")
         ;;
@@ -447,7 +445,7 @@ case "$1" in
         ;;
 esac
 ```
-Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```chmod 755 hook.sh```.
+Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```chmod 755 hook.sh```. <br/>
 Ahora ejecutamos la instruccion ```./dehydrated --register --accept-terms``` y esperamos hasta que aparezca <b>Done!</b> en pantalla.
 
 Ahora ejecutamos la instruccion ```./dehydrated -c``` y esperamos hasta que nos pida la contraseña de admin de HA, en este punto salimos pulsando <b> Ctrl + c </b> .
@@ -462,13 +460,13 @@ Por ultimo solo tenemos que ir a alchivo de configuracion de HA ```configuration
 
 ```bash 
 http:
-  ssl_certificate: /home/homeassistant/dehydrated/certs/xxxxxxxxx.duckdns.org/fullchain.pem
-  ssl_key: /home/homeassistant/dehydrated/certs/xxxxxxxxx.duckdns.org/privkey.pem
-  base_url: https://xxxxxxx.duckdns.org:8123
+  ssl_certificate: /config/dehydrated/certs/xxxxxx.duckdns.org/fullchain.pem
+  ssl_key: /config/dehydrated/certs/xxxxx.duckdns.org/privkey.pem
+  base_url: xxxxxx.duckdns.org:8123
 ```
-reiniciamos HA, para ello primero salimos con ```exit``` y reiniciamos con ```sudo systemctl restart homeassistant```.
+reiniciamos HA con ```sudo docker restart Homeassistant```.
 
-Si todo ha salido bien la pagina deberia ser accesible desde https://<b>xxxxxxx</b>.duckdns.org:8123
+Si todo ha salido bien la pagina deberia ser accesible desde <b>https://xxxxxxx.duckdns.org:8123</b>
 
 
 ## Instalacion Acceso con Matricula
