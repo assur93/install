@@ -448,7 +448,7 @@ esac
 Y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b> y lo convertimos en ejecutable con la instruccion ```chmod 755 hook.sh```. <br/>
 Ahora ejecutamos la instruccion ```./dehydrated --register --accept-terms``` y esperamos hasta que aparezca <b>Done!</b> en pantalla.
 
-Ahora ejecutamos la instruccion ```./dehydrated -c``` y esperamos hasta que nos pida la contraseña de admin de HA, en este punto salimos pulsando <b> Ctrl + c </b> .
+Ahora ejecutamos la instruccion ```./dehydrated -c``` y esperamos hasta que nos aparezca <b>Done!</b> en pantalla.
 
 Ahora ejecutamos la instruccion ```crontab -e``` y en el editor que sale al final de todo pegamos la siguiente linea 
 
