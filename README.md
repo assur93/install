@@ -431,7 +431,7 @@ case "$1" in
         echo
         ;;
     "deploy_cert")
-        sudo docker restart homeassistant
+        sudo docker restart Homeassistant
         ;;
     "unchanged_cert")
         ;;
