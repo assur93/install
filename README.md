@@ -452,7 +452,7 @@ Ahora ejecutamos la instruccion ```sudo ./dehydrated -c``` y esperamos hasta que
 
 Ahora ejecutamos la instruccion ```crontab -e``` y en el editor que sale al final de todo pegamos la siguiente linea 
 
-```0 1 1 * * /home/homeassistant/dehydrated/dehydrated -c```
+```0 1 1 * * /docker/homeassistant/dehydrated/dehydrated -c```
 
 y como siempre lo guardamos con <b> Ctrl + o </b>, salimos con <b> Ctrl + c </b>.
 
