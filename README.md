@@ -631,3 +631,27 @@ Y dentro del archivo, a continuacion de fi ponemos
 ```bash
 sudo sh '/home/pi/ofibase/ejecutable.sh'
 ```
+
+## IP fija Raspberry
+
+1 - Introducir el comando ```ip route show``` para ver la puerta de enlace del router
+2 - Introducir el comando ```cat /etc/resolv.conf``` para ver las DNS 
+3 - Introducir el comando ```sudo nano /etc/dhcpcd.conf``` para configurar la IP. Tras este copiamos el siguiente texto modificandolo con los valores obtenidos antes
+
+# Wifi
+
+```bash
+interface wlan0 
+static ip_address=192.168.1.250/24
+static routers=192.168.1.1
+static domain_name_servers=8.8.8.8 46.6.113.34
+```
+
+# Cable
+
+```bash
+interface eth0 
+static ip_address=192.168.1.250/24
+static routers=192.168.1.1
+static domain_name_servers=8.8.8.8 46.6.113.34
+```
