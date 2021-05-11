@@ -638,7 +638,7 @@ sudo sh '/home/pi/ofibase/ejecutable.sh'
 2 - Introducir el comando ```cat /etc/resolv.conf``` para ver las DNS 
 3 - Introducir el comando ```sudo nano /etc/dhcpcd.conf``` para configurar la IP. Tras este copiamos el siguiente texto modificandolo con los valores obtenidos antes
 
-# Wifi
+### Wifi
 
 ```bash
 interface wlan0 
@@ -647,7 +647,7 @@ static routers=192.168.1.1
 static domain_name_servers=8.8.8.8 46.6.113.34
 ```
 
-# Cable
+### Cable
 
 ```bash
 interface eth0 
